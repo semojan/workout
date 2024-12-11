@@ -9,7 +9,11 @@ const User = sequelize.define('User', {
         autoIncrement: true, 
     },
     password: {
-        type: DataTypes.STRING(30), 
+        type: DataTypes.STRING(225), 
+        allowNull: false,
+    },
+    salt: {
+        type: DataTypes.STRING(32), 
         allowNull: false,
     },
     name: {
@@ -31,10 +35,14 @@ const User = sequelize.define('User', {
     email: {
         type: DataTypes.STRING(50),
         allowNull: false,
+        validate: {
+            isEmail: true, // Ensures valid email format
+        },
     },
     username: {
         type: DataTypes.STRING(30),
         allowNull: false,
+        unique: true, 
     },
     public: {
         type: DataTypes.BOOLEAN,
