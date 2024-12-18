@@ -1,29 +1,23 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../../../Infrastructure/database/db');
 
-const ExerciseInWorkout = sequelize.define('ExerciseInWorkout', {
+const STATUS = ['Scheduled', 'Completed', 'Skipped'];
+
+const WorkoutSchedule = sequelize.define('WorkoutSchedule', {
     id: {
         type: DataTypes.INTEGER,
         allowNull: false,
         primaryKey: true,
         autoIncrement: true, 
     },
-    duration: {
-        type: DataTypes.INTEGER,
+    status: {
+        type: DataTypes.ENUM(...STATUS),
         allowNull: false,
+        defaultValue: 'Scheduled'
     },
-    order: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
-    },
-    exercise: {
-        type: DataTypes.INTEGER,
-        allowNull: true, 
-        references: {
-            model: exercise,
-            key: 'id' 
-        },
-        onDelete: 'CASCADE',
+    schedule: {
+        type: DataTypes.DATE,
+        allowNull: false,
     },
     workout: {
         type: DataTypes.INTEGER,
@@ -33,10 +27,19 @@ const ExerciseInWorkout = sequelize.define('ExerciseInWorkout', {
             key: 'id' 
         },
         onDelete: 'CASCADE',
+    },
+    user: {
+        type: DataTypes.INTEGER,
+        allowNull: true, 
+        references: {
+            model: users,
+            key: 'id' 
+        },
+        onDelete: 'CASCADE',
     }
 }, {
-    tableName: 'exercisesinworkouts',
+    tableName: 'workoutschedules',
     timestamps: true,
 });
 
-module.exports = ExerciseInWorkout;
+module.exports = WorkoutSchedule;
