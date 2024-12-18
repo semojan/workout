@@ -1,7 +1,5 @@
 const path = require("path");
 
-console.log("Swagger scanning path:", path.join(__dirname, "../routes/*.js"));
-
 const swaggerOptions = {
     swaggerDefinition: {
         openapi: "3.0.0",

@@ -1,0 +1,24 @@
+{
+    "development": {
+      "username": "workoutmanager",
+      "password": "wm1234",
+      "database": "workoutdb",
+      "host": "127.0.0.1",
+      "dialect": "postgres"
+    },
+    "test": {
+      "username": "workoutmanager",
+      "password": "wm1234",
+      "database": "workoutdb_test",
+      "host": "127.0.0.1",
+      "dialect": "postgres"
+    },
+    "production": {
+      "username": "workoutmanager",
+      "password": "wm1234",
+      "database": "workoutdb",
+      "host": "127.0.0.1",
+      "dialect": "postgres"
+    }
+  }
+  
