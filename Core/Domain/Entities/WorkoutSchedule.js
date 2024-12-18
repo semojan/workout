@@ -21,7 +21,7 @@ const WorkoutSchedule = sequelize.define('WorkoutSchedule', {
     },
     workout: {
         type: DataTypes.INTEGER,
-        allowNull: true, 
+        allowNull: false, 
         references: {
             model: workouts,
             key: 'id' 
@@ -30,7 +30,7 @@ const WorkoutSchedule = sequelize.define('WorkoutSchedule', {
     },
     user: {
         type: DataTypes.INTEGER,
-        allowNull: true, 
+        allowNull: false, 
         references: {
             model: users,
             key: 'id' 

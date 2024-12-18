@@ -21,7 +21,7 @@ module.exports = {
       },
       workout: {
         type: Sequelize.INTEGER,
-        allowNull: true,
+        allowNull: false,
         references: {
           model: 'workouts',
           key: 'id',
@@ -30,7 +30,7 @@ module.exports = {
       },
       user: {
         type: Sequelize.INTEGER,
-        allowNull: true,
+        allowNull: false,
         references: {
           model: 'users',
           key: 'id',

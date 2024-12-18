@@ -1,42 +1,42 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../../../Infrastructure/database/db');
 
-const ExerciseInWorkout = sequelize.define('ExerciseInWorkout', {
+const Comment = sequelize.define('Comment', {
     id: {
         type: DataTypes.INTEGER,
         allowNull: false,
         primaryKey: true,
         autoIncrement: true, 
     },
-    duration: {
-        type: DataTypes.INTEGER,
+    title:{
+        type: DataTypes.STRING(100),
         allowNull: false,
     },
-    order: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
+    text: {
+        type: DataTypes.TEXT,
+        allowNull: false,
     },
-    exercise: {
+    user: {
         type: DataTypes.INTEGER,
         allowNull: false, 
         references: {
-            model: exercise,
+            model: users,
             key: 'id' 
         },
         onDelete: 'CASCADE',
     },
     workout: {
         type: DataTypes.INTEGER,
-        allowNull: false, 
+        allowNull: false,
         references: {
             model: workouts,
-            key: 'id' 
+            key: 'id'
         },
-        onDelete: 'CASCADE',
-    }
+        onDelete: 'CASCADE'
+    } 
 }, {
-    tableName: 'exercisesinworkouts',
+    tableName: 'comments',
     timestamps: true,
 });
 
-module.exports = ExerciseInWorkout;
+module.exports = Comment;

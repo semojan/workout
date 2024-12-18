@@ -3,26 +3,26 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('exercisesinworkout', {
+    await queryInterface.createTable('comments', {
       id: {
         type: Sequelize.INTEGER,
         allowNull: false,
         primaryKey: true,
         autoIncrement: true,
       },
-      duration: {
-        type: Sequelize.INTEGER,
+      title: {
+        type: Sequelize.STRING(100),
         allowNull: false,
       },
-      order: {
-        type: Sequelize.INTEGER,
-        allowNull: true,
+      text: {
+        type: Sequelize.TEXT,
+        allowNull: false,
       },
-      exercise: {
+      user: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: 'exercise',
+          model: 'users', // Ensure the table name is 'users' for user reference
           key: 'id',
         },
         onDelete: 'CASCADE',
@@ -31,7 +31,7 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: 'workouts',
+          model: 'workouts', // Ensure the table name is 'workoutschedule' for workout reference
           key: 'id',
         },
         onDelete: 'CASCADE',
@@ -48,6 +48,7 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('exercisesinworkout');
+    await queryInterface.dropTable('comments');
   },
 };
+
