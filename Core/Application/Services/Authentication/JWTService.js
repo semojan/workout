@@ -1,37 +1,22 @@
 const jwt = require("jsonwebtoken");
+const dotenv = require("dotenv");
+dotenv.config();
 
-function generateToken (uid){
-    let jwtSecretKey = process.env.JWT_SECRET_KEY;
-    let data = {
+const jwtSecretKey = process.env.JWT_SECRET_KEY;
+
+function generateToken(uid) {
+    const data = {
         time: Date(),
         userId: uid,
-    }
-
-    const token = jwt.sign(data, jwtSecretKey);
-
-    return token;
+    };
+    return jwt.sign(data, jwtSecretKey);
 }
 
-function validateToken(req, res, next){
-    let tokenHeaderKey = process.env.TOKEN_HEADER_KEY;
-    let jwtSecretKey = process.env.JWT_SECRET_KEY;
-
-    try {
-        const token = req.header(tokenHeaderKey);
-
-        const verified = jwt.verify(token, jwtSecretKey);
-        if (verified) {
-            req.user = verified;
-            return res.send("Successfully Verified");
-        } else {
-            return res.status(401).send(error);
-        }
-    } catch (error) {
-        return res.status(401).send(error);
-    }
+function verifyToken(token) {
+    return jwt.verify(token, jwtSecretKey);
 }
 
 module.exports = {
-    generateToken: generateToken,
-    validateToken: validateToken
+    generateToken,
+    verifyToken,
 };
