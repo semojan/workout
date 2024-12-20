@@ -34,7 +34,7 @@ const Workout = sequelize.define('Workout', {
         type: DataTypes.INTEGER,
         allowNull: true, 
         references: {
-            model: users,
+            model: "users",
             key: 'id' 
         },
         onDelete: 'SET NULL',

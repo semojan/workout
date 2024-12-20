@@ -20,7 +20,7 @@ const ExerciseInWorkout = sequelize.define('ExerciseInWorkout', {
         type: DataTypes.INTEGER,
         allowNull: false, 
         references: {
-            model: exercise,
+            model: 'exercise',
             key: 'id' 
         },
         onDelete: 'CASCADE',
@@ -29,13 +29,13 @@ const ExerciseInWorkout = sequelize.define('ExerciseInWorkout', {
         type: DataTypes.INTEGER,
         allowNull: false, 
         references: {
-            model: workouts,
+            model: 'workouts',
             key: 'id' 
         },
         onDelete: 'CASCADE',
     }
 }, {
-    tableName: 'exercisesinworkouts',
+    tableName: 'exercisesinworkout',
     timestamps: true,
 });
 

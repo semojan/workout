@@ -79,4 +79,6 @@ const controller = require("../controllers/Exercise.controller");
 
 router.get("/", controller.GetAllExercises);
 
+router.post("/addToWorkout", controller.AddToWorkout);
+
 module.exports = router;

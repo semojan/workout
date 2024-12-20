@@ -1,0 +1,1 @@
+const PublicService = require("../../Core/Application/Services/Workouts/WorkoutsPublicServices");
