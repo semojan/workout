@@ -27,7 +27,6 @@ async function AddExerciseInWorkoutService(workoutId, exerciseId, duration, orde
 
         workout.totalDuration += duration;
         workout.totalExp = parseInt((workout.totalDuration / 4).toFixed(0), 10);
-        console.log(workout.totalDuration, workout.totalExp)
 
         await workout.save();
         return { message: "Exercise added to workout successfully" };
