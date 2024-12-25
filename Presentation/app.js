@@ -3,6 +3,7 @@ const swaggerUi = require('swagger-ui-express');
 const swaggerJsDoc = require('swagger-jsdoc');
 
 const authMiddleware = require("./middlewares/authMiddleware");
+const optionalAuthMiddleware = require("./middlewares/optionalAuthMiddleware");
 
 //routes ---------------------------------------------------------------------
 const AuthRoutes = require("./routes/AuthRoutes");
@@ -20,7 +21,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 app.use(AuthRoutes);
 app.use("/exercises", authMiddleware, ExerciseRoutes);
-app.use("/workout", WorkoutPublicRoutes);
+app.use("/workout", optionalAuthMiddleware, WorkoutPublicRoutes);
 app.use("/workout", authMiddleware, WorkoutPrivateRoutes);
 
 //error handling -------------------------------------------------------------

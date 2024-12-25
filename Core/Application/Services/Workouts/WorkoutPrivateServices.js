@@ -17,7 +17,26 @@ async function AddWorkoutService(data, userId){
     }
 }
 
-async function UpdateWorkoutService(){}
+async function UpdateWorkoutService(data, workoutId){
+    try{
+        const workout = await Workouts.findByPk(workoutId);
+        if(!workout){
+            const error = new Error("workout not found");
+            error.status = 404;
+            return {message: "workout not found", error: error};
+        }
+
+        workout.name = data.name || workout.name;
+        workout.description = data.description || workout.description;
+        workout.public = data.public || workout.public;
+        
+        await workout.save();
+
+        return {message: "workout updated successfully"};
+    } catch (e){
+        return {message: "failed to edit workout", error: e};
+    }
+}
 
 async function DeleteWorkoutService(){}
 

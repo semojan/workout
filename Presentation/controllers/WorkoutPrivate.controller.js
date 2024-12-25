@@ -9,7 +9,14 @@ async function AddWorkout(req, res, next){
     res.json(result);
 }
 
-async function UpdateWorkout(req, res, next){}
+async function UpdateWorkout(req, res, next){
+    const workoutId = req.params.id;
+    const data = req.body;
+
+    result = await services.UpdateWorkoutService(data, workoutId);
+    
+    res.json(result);
+}
 
 async function DeleteWorkout(req, res, next){}
 
