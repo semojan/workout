@@ -1,3 +1,4 @@
+const { where } = require("sequelize");
 const Workouts = require("../../../Domain/Entities/Workout");
 
 async function AddWorkoutService(data, userId){
@@ -38,9 +39,38 @@ async function UpdateWorkoutService(data, workoutId){
     }
 }
 
-async function DeleteWorkoutService(){}
+async function DeleteWorkoutService(workoutId, userId){
+    try{
+        const workout = await Workouts.findByPk(workoutId);
+        if(!workout){
+            const error = new Error("workout not found");
+            error.status = 404;
+            return {message: "workout not found", error: error};
+        }
 
-async function GetUserWorkoutsService(){}
+        if(workout.creatorId !== userId){
+            const error = new Error("you do not have permission to delete this workout");
+            error.status = 403;
+            return {message: "no permission to remove workout", error: error};
+        }
+
+        await Workouts.destroy({ where: { id: workoutId } });
+
+        return {message: "workout removed successfully"};
+    }catch(e){
+        return {message: "could not remove workout"};
+    }
+}
+
+async function GetUserWorkoutsService(userId){
+    try{
+        const workouts = await Workouts.findAll({where: {creatorId: userId}});
+
+        return {message: "user workouts fetched successfully", workouts: workouts};
+    }catch(e){
+        return {message: "could not get your workouts"};
+    }
+}
 
 module.exports = {
     AddWorkoutService: AddWorkoutService,
