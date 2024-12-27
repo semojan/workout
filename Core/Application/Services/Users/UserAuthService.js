@@ -1,4 +1,4 @@
-const User = require("../../../Domain/Entities/User");
+const {User} = require("../../../../Infrastructure/database/db");
 const JWTService = require("../Authentication/JWTService");
 const validator = require("validator");
 const hash = require("../../../../Common/hash");

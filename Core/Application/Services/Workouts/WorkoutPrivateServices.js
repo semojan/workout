@@ -1,9 +1,10 @@
 const { where } = require("sequelize");
-const Workouts = require("../../../Domain/Entities/Workout");
+const {Workout} = require("../../../../Infrastructure/database/db");
+
 
 async function AddWorkoutService(data, userId){
     try{
-        const workout = await Workouts.create({
+        const workout = await Workout.create({
             name: data.name,
             description: data.description,
             public: data.public,
@@ -20,7 +21,7 @@ async function AddWorkoutService(data, userId){
 
 async function UpdateWorkoutService(data, workoutId){
     try{
-        const workout = await Workouts.findByPk(workoutId);
+        const workout = await Workout.findByPk(workoutId);
         if(!workout){
             const error = new Error("workout not found");
             error.status = 404;
@@ -41,7 +42,7 @@ async function UpdateWorkoutService(data, workoutId){
 
 async function DeleteWorkoutService(workoutId, userId){
     try{
-        const workout = await Workouts.findByPk(workoutId);
+        const workout = await Workout.findByPk(workoutId);
         if(!workout){
             const error = new Error("workout not found");
             error.status = 404;
@@ -64,7 +65,7 @@ async function DeleteWorkoutService(workoutId, userId){
 
 async function GetUserWorkoutsService(userId){
     try{
-        const workouts = await Workouts.findAll({where: {creatorId: userId}});
+        const workouts = await Workout.findAll({where: {creatorId: userId}});
 
         return {message: "user workouts fetched successfully", workouts: workouts};
     }catch(e){

@@ -1,7 +1,7 @@
 //requirements ----------------------------------------------------------------------------------
 const app = require("./Presentation/app");
 const dotenv = require("dotenv");
-const sequelize = require("./Infrastructure/database/db");
+const {sequelize} = require("./Infrastructure/database/db");
 
 dotenv.config();
 

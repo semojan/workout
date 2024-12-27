@@ -1,4 +1,4 @@
-const { Sequelize } = require('sequelize');
+const { Sequelize, DataTypes } = require('sequelize');
 const dotenv = require('dotenv');
 const path = require('path');
 
@@ -12,20 +12,26 @@ const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, proces
   logging: false, 
 });
 
-module.exports = sequelize;
+const Exercise = require("../../Core/Domain/Entities/Exercise")(sequelize, DataTypes);
+const ExerciseInWorkout = require("../../Core/Domain/Entities/ExerciseInWorkout")(sequelize, DataTypes);
+const Workout = require("../../Core/Domain/Entities/Workout")(sequelize, DataTypes);
+const User = require("../../Core/Domain/Entities/User")(sequelize, DataTypes);
+const WorkoutSchedule = require("../../Core/Domain/Entities/WorkoutSchedule")(sequelize, DataTypes);
+const Comment = require("../../Core/Domain/Entities/Comments")(sequelize, DataTypes);
 
-// const dotenv = require("dotenv");
-// const path = require("path");
+const models = {
+  Exercise,
+  ExerciseInWorkout,
+  Workout,
+  User,
+  WorkoutSchedule,
+  Comment
+};
 
-// dotenv.config({ path: path.resolve(__dirname, "../../.env") });
+Object.values(models).forEach((model) => {
+  if (model.associate) {
+      model.associate(models);
+  }
+});
 
-// const Pool = require('pg').Pool
-// const pool = new Pool({
-//   user: process.env.DB_USER,
-//   host: process.env.DB_HOST,
-//   database: process.env.DB_NAME,
-//   password: process.env.DB_PASSWORD,
-//   port: 5432,
-// });
-
-// module.exports = pool;
+module.exports = { sequelize: sequelize, ...models };

@@ -1,13 +1,18 @@
-const ExerciseInWorkout = require("../../../Domain/Entities/ExerciseInWorkout");
-const Workout = require("../../../Domain/Entities/Workout");
-const Exercise = require("../../../Domain/Entities/Exercise");
+const {Workout, Exercise, ExerciseInWorkout} = require("../../../../Infrastructure/database/db");
+const { Op } = require("sequelize");
 
-async function AddExerciseInWorkoutService(workoutId, exerciseId, duration, order){
+async function AddExerciseInWorkoutService(workoutId, exerciseId, duration, order, userId){
     const workout = await Workout.findOne({where: {id: workoutId}});
     if (!workout){
         const err = new Error("the workout to add exercise does not exist");
         err.status = 404;
         return {message: "workout not found", error: err};
+    }
+
+    if (workout.creatorId !== userId){
+        const err = new Error("you do not have permission to change this workout");
+        err.status = 403;
+        return {message: "no permission", error: err};
     }
 
     const exercise = await Exercise.findOne({where: {id: workoutId}});
@@ -31,10 +36,53 @@ async function AddExerciseInWorkoutService(workoutId, exerciseId, duration, orde
         await workout.save();
         return { message: "Exercise added to workout successfully" };
     }catch(e){
+        console.log(e)
         return {message: "adding exercise failed", error: e};
     }
 }
 
+async function GetForWorkoutService(workoutId, userId) {
+    try{
+        const workout = await Workout.findByPk(workoutId);
+        if (!workout){
+            const err = new Error("the workout to add exercise does not exist");
+            err.status = 404;
+            return {message: "workout not found", error: err};
+        }
+
+        if (workout.public === false && workout.creatorId !== userId){
+            const err = new Error("you do not have permission to access this workout");
+            err.status = 403;
+            return {message: "permission denied", error: err};
+        }
+
+        const exercises = await Exercise.findAll({
+            include: {
+                model: ExerciseInWorkout,
+                as: "exercisesInWorkout", 
+                where: {
+                workout: workoutId,
+                },
+                attributes: []
+            },
+            order: [[{ model: ExerciseInWorkout, as: "exercisesInWorkout" }, "order", "ASC"]]
+        });
+        console.log("gothere")
+
+
+        return {message: "exercises fetched successfully", exercises: exercises};
+    }catch(e){
+        console.log(e)
+        return {message: "could not get exercises", error: e};
+    }
+}
+
+async function DeleteFromWorkoutService() {
+    
+}
+
 module.exports = {
-    AddExerciseInWorkoutService: AddExerciseInWorkoutService
+    AddExerciseInWorkoutService: AddExerciseInWorkoutService,
+    GetForWorkoutService: GetForWorkoutService,
+    DeleteFromWorkoutService: DeleteFromWorkoutService
 };

@@ -7,6 +7,7 @@ const optionalAuthMiddleware = require("./middlewares/optionalAuthMiddleware");
 
 //routes ---------------------------------------------------------------------
 const AuthRoutes = require("./routes/AuthRoutes");
+const ExercisePublicRoutes = require("./routes/ExercisePublicRoute");
 const ExerciseRoutes = require("./routes/ExerciseRoutes");
 const WorkoutPublicRoutes = require("./routes/WorkoutPublicRoutes");
 const WorkoutPrivateRoutes = require("./routes/WorkoutPrivateRoutes");
@@ -20,6 +21,7 @@ const swaggerDocs = swaggerJsDoc(swaggerOptions);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 app.use(AuthRoutes);
+app.use("/exercises", optionalAuthMiddleware, ExercisePublicRoutes);
 app.use("/exercises", authMiddleware, ExerciseRoutes);
 app.use("/workout", optionalAuthMiddleware, WorkoutPublicRoutes);
 app.use("/workout", authMiddleware, WorkoutPrivateRoutes);

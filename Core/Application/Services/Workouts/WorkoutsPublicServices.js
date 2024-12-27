@@ -1,9 +1,10 @@
-const Workouts = require("../../../Domain/Entities/Workout");
+const {Workout} = require("../../../../Infrastructure/database/db");
+
 const { Op } = require("sequelize");
 
 async function GetAllWorkoutsService(userId){
     try {
-        const workouts = await Workouts.findAll({
+        const workouts = await Workout.findAll({
             where: {
                 [Op.or]: [
                 { public: true },

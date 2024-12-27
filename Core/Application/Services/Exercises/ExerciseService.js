@@ -1,4 +1,4 @@
-const Exercise = require("../../../Domain/Entities/Exercise");
+const {Exercise} = require("../../../../Infrastructure/database/db");
 
 async function GetAllExercisesService(filters = {}) {
     const { category, muscleGroup } = filters;
