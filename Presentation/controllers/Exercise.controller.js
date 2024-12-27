@@ -16,7 +16,12 @@ async function AddToWorkout(req, res, next){
 }
 
 async function DeleteFromWorkout(req, res, next) {
-    
+    const userId = req.user.userId;
+    const {workoutId, exerciseId} = req.params;
+
+    const result = await ExerciseInWorkoutService.DeleteFromWorkoutService(workoutId, exerciseId, userId);
+
+    res.json(result);
 }
 
 module.exports = {

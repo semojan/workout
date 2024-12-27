@@ -101,6 +101,95 @@ const controller = require("../controllers/Exercise.controller");
 
 router.post("/addToWorkout", controller.AddToWorkout);
 
-router.delete("/:workoutId/:exerciseId");
+
+/**
+ * @swagger
+ * /exercises/{workoutId}/{exerciseId}:
+ *   delete:
+ *     summary: Remove an exercise from a specific workout.
+ *     description: Deletes an association between an exercise and a workout, provided the workout exists and the user has permission to modify it.
+ *     parameters:
+ *       - in: path
+ *         name: workoutId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The ID of the workout to remove the exercise from.
+ *         example: 1
+ *       - in: path
+ *         name: exerciseId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The ID of the exercise to be removed from the workout.
+ *         example: 5
+ *     responses:
+ *       200:
+ *         description: Exercise removed successfully from the workout.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "exercise removed successfully"
+ *       404:
+ *         description: Workout not found.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "workout not found"
+ *                 error:
+ *                   type: object
+ *                   properties:
+ *                     status:
+ *                       type: integer
+ *                       example: 404
+ *                     message:
+ *                       type: string
+ *                       example: "the workout to remove exercise from does not exist"
+ *       403:
+ *         description: Permission denied to modify the workout.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "no permission"
+ *                 error:
+ *                   type: object
+ *                   properties:
+ *                     status:
+ *                       type: integer
+ *                       example: 403
+ *                     message:
+ *                       type: string
+ *                       example: "you do not have permission to change this workout"
+ *       500:
+ *         description: Could not remove the exercise due to server error.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: "could not remove exercise from workout"
+ *                 error:
+ *                   type: object
+ *                   properties:
+ *                     message:
+ *                       type: string
+ *                       example: "Internal server error"
+ */
+
+router.delete("/:workoutId/:exerciseId", controller.DeleteFromWorkout);
 
 module.exports = router;

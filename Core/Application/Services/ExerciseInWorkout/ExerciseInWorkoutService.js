@@ -77,8 +77,33 @@ async function GetForWorkoutService(workoutId, userId) {
     }
 }
 
-async function DeleteFromWorkoutService() {
+async function DeleteFromWorkoutService(workoutId, exerciseId, userId) {
+    try{
+        const workout = await Workout.findOne({where: {id: workoutId}});
+        if (!workout){
+            const err = new Error("the workout to remove exercise from does not exist");
+            err.status = 404;
+            return {message: "workout not found", error: err};
+        }
     
+        if (workout.creatorId !== userId){
+            const err = new Error("you do not have permission to change this workout");
+            err.status = 403;
+            return {message: "no permission", error: err};
+        }
+
+        await ExerciseInWorkout.destroy({
+            where: {
+                workout: workoutId,
+                exercise: exerciseId
+            }
+        });
+        
+        return {message: "exercise removed successfully"};
+    
+    }catch(e){
+        return {message: "could not remove exercise from workout"};
+    }
 }
 
 module.exports = {
