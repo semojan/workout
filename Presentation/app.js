@@ -11,6 +11,7 @@ const ExercisePublicRoutes = require("./routes/ExercisePublicRoute");
 const ExerciseRoutes = require("./routes/ExerciseRoutes");
 const WorkoutPublicRoutes = require("./routes/WorkoutPublicRoutes");
 const WorkoutPrivateRoutes = require("./routes/WorkoutPrivateRoutes");
+const WorkoutScheduleRoutes = require("./routes/WorkoutScheduleRoutes");
 
 const swaggerOptions = require("./config/swagger");
 
@@ -25,6 +26,7 @@ app.use("/exercises", optionalAuthMiddleware, ExercisePublicRoutes);
 app.use("/exercises", authMiddleware, ExerciseRoutes);
 app.use("/workout", optionalAuthMiddleware, WorkoutPublicRoutes);
 app.use("/workout", authMiddleware, WorkoutPrivateRoutes);
+app.use("/workout/schedule", authMiddleware, WorkoutScheduleRoutes);
 
 //error handling -------------------------------------------------------------
 app.use((err, req, res, next) => {
