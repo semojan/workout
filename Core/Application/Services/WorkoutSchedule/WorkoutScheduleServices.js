@@ -88,7 +88,7 @@ async function GetScheduleService(scheduleId, userId) {
     }
 }
 
-async function UpdateScheduleService(scheduleId, status, scheduleTime) { 
+async function UpdateScheduleService(scheduleId, status, scheduleTime, userId) { 
     try{
         const schedule = await WorkoutSchedule.findByPk(scheduleId);
 
@@ -109,6 +109,20 @@ async function UpdateScheduleService(scheduleId, status, scheduleTime) {
             return { message: `Invalid status.`, error: err };
         }
 
+        if (schedule.status === 'Completed'){
+            const err = new Error("you have already completed this workout");
+            return {message: "unable to update", error: err};
+        }
+
+        if (status === "Completed"){
+            const user = await User.findByPk(schedule.user);
+
+            const workout = await Workout.findByPk(schedule.workout);
+
+            user.exp += workout.totalExp;
+            await user.save();
+        }
+
         if (scheduleTime) {
             const parsedSchedule = new Date(scheduleTime);
             if (isNaN(parsedSchedule)) {
@@ -118,7 +132,7 @@ async function UpdateScheduleService(scheduleId, status, scheduleTime) {
             const now = new Date();
             if (parsedSchedule <= now) {
                 const err = new Error('The schedule time must be in the future.');
-            return { message: "invalid date", error: err };
+                return { message: "invalid date", error: err };
             }
             schedule.schedule = parsedSchedule;
         }
@@ -135,7 +149,7 @@ async function UpdateScheduleService(scheduleId, status, scheduleTime) {
     }
 }
 
-async function DeleteScheduleService(scheduleId) { 
+async function DeleteScheduleService(scheduleId, userId) { 
     try {
         const schedule = await WorkoutSchedule.findByPk(scheduleId);
 
@@ -149,6 +163,15 @@ async function DeleteScheduleService(scheduleId) {
             const err = new Error("You do not have permission to remove this schedule");
             err.status = 403;
             return { message: "no permission", error: err };
+        }
+
+        if (schedule.status === 'Completed'){
+            const user = await User.findByPk(schedule.user);
+
+            const workout = await Workout.findByPk(schedule.workout);
+
+            user.exp -= workout.totalExp;
+            await user.save();
         }
 
         await schedule.destroy();

@@ -29,16 +29,18 @@ async function GetSchedule(req, res, next) {
 async function UpdateSchedule(req, res, next) {
     const scheduleId = req.params.id;
     const { status, schedule } = req.body;
+    const userId = req.user.userId;
 
-    const result = await services.UpdateScheduleService(scheduleId, status, schedule);
+    const result = await services.UpdateScheduleService(scheduleId, status, schedule, userId);
 
     res.json(result);
 }
 
 async function DeleteSchedule(req, res, next) { 
     const scheduleId = req.params.id;
+    const userId = req.user.userId;
 
-    const result = await services.DeleteScheduleService(scheduleId);
+    const result = await services.DeleteScheduleService(scheduleId, userId);
 
     res.json(result);
 }

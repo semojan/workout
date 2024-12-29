@@ -34,7 +34,7 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.STRING(50),
             allowNull: false,
             validate: {
-                isEmail: true, // Ensures valid email format
+                isEmail: true, 
             },
         },
         username: {
@@ -56,6 +56,13 @@ module.exports = (sequelize, DataTypes) => {
         tableName: 'users',
         timestamps: true,
     });
+
+    User.associate = (models) => {
+        User.hasMany(models.Comment, {
+            foreignKey: 'user', 
+            as: 'comments', 
+        });
+    };    
  
     return User;
 };
