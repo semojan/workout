@@ -1,4 +1,5 @@
 const { Workout, User, WorkoutSchedule } = require("../../../../Infrastructure/database/db");
+const redisClient = require("../../../../Infrastructure/redisDB/redisClient");
 
 const STATUS = ['Scheduled', 'Completed', 'Skipped'];
 
@@ -121,6 +122,9 @@ async function UpdateScheduleService(scheduleId, status, scheduleTime, userId) {
 
             user.exp += workout.totalExp;
             await user.save();
+
+            await redisClient.zAdd('leaderboard', { score: Number(user.exp), value: user.id.toString() }); 
+            await redisClient.hSet(`user:${user.id}`, 'username', user.username, 'exp', user.exp.toString());
         }
 
         if (scheduleTime) {
@@ -145,6 +149,8 @@ async function UpdateScheduleService(scheduleId, status, scheduleTime, userId) {
 
         return {message: "schedule updated successfully", data: schedule};
     } catch (e) {
+
+        console.log(e)
         return { message: e.message, error: e };
     }
 }
@@ -172,6 +178,9 @@ async function DeleteScheduleService(scheduleId, userId) {
 
             user.exp -= workout.totalExp;
             await user.save();
+            
+            await redisClient.zAdd('leaderboard', { score: Number(user.exp), value: user.id.toString() }); 
+            await redisClient.hSet(`user:${user.id}`, 'username', user.username, 'exp', user.exp.toString());
         }
 
         await schedule.destroy();

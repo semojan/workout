@@ -13,6 +13,7 @@ const WorkoutPublicRoutes = require("./routes/WorkoutPublicRoutes");
 const WorkoutPrivateRoutes = require("./routes/WorkoutPrivateRoutes");
 const WorkoutScheduleRoutes = require("./routes/WorkoutScheduleRoutes");
 const CommentsRoutes = require("./routes/CommentRoute");
+const LeaderboardRoutes = require("./routes/LeaderboardRoutes");
 
 const swaggerOptions = require("./config/swagger");
 
@@ -29,6 +30,7 @@ app.use("/workout", optionalAuthMiddleware, WorkoutPublicRoutes);
 app.use("/workout", authMiddleware, WorkoutPrivateRoutes);
 app.use("/workout/schedule", authMiddleware, WorkoutScheduleRoutes);
 app.use("/comments", optionalAuthMiddleware, CommentsRoutes);
+app.use("/leaderboard", optionalAuthMiddleware, LeaderboardRoutes);
 
 //error handling -------------------------------------------------------------
 app.use((err, req, res, next) => {
